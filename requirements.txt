@@ -1,0 +1,10 @@
+streamlit
+neo4j
+boto3
+langchain
+langchain-community
+python-dotenv
+PyPDF2
+wikipedia
+faiss-cpu
+sentence-transformers
