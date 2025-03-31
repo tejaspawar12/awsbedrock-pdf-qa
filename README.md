@@ -112,13 +112,6 @@ streamlit run app.py
 
 ---
 
-## 🖼️ Screenshots
-
-| PDF Upload & Processing       | Claude Answering a Query         |
-|------------------------------|----------------------------------|
-| ![](assets/screenshots/upload.png) | ![](assets/screenshots/chat.png) |
-
----
 
 ## ✅ Features in Action
 
