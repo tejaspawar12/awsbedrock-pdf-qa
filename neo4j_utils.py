@@ -28,6 +28,24 @@ class Neo4jConnection:
                 CREATE (c:Chunk {id: $id, content: $content})
             """, id=index, content=chunk_text)
 
+    def create_relationship(self, source_id: int, target_id: int):
+        with self.driver.session() as session:
+            session.run("""
+                MATCH (a:Chunk {id: $source_id}), (b:Chunk {id: $target_id})
+                MERGE (a)-[:NEXT]->(b)
+            """, source_id=source_id, target_id=target_id)
+
+    def store_chunks(self, chunks):
+        with self.driver.session() as session:
+            for i, chunk in enumerate(chunks):
+                session.run(
+                    "CREATE (c:Chunk {id: $id, content: $content})",
+                    id=i,
+                    content=chunk
+                )
+                if i > 0:
+                    self.create_relationship(i - 1, i)
+
     def get_all_chunks(self):
         with self.driver.session() as session:
             result = session.run("MATCH (c:Chunk) RETURN c.content AS content")
@@ -36,12 +54,3 @@ class Neo4jConnection:
     def clear_all_chunks(self):
         with self.driver.session() as session:
             session.run("MATCH (c:Chunk) DETACH DELETE c")
-    
-    def store_chunks(self, chunks):
-        with self.driver.session() as session:
-            for i, chunk in enumerate(chunks):
-                session.run(
-                "CREATE (c:Chunk {id: $id, content: $content})",
-                id=i,
-                content=chunk
-            )
